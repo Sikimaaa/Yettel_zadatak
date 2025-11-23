@@ -15,7 +15,7 @@ const options = {
             },
         ],
     },
-    apis: ["./src/routes/*.js"], // Swagger scans all route files
+    apis: ["./src/routes/*.js"],
 };
 
 const specs = swaggerJsDoc(options);

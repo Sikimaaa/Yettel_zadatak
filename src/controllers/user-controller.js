@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const { User } = require('../models');
-const { Op } = require('sequelize');
+const {User} = require('../models');
+const {Op} = require('sequelize');
 
 // helper za update (koristi i /me i admin update)
 const applyUserUpdates = async (user, data) => {
@@ -21,7 +21,7 @@ const applyUserUpdates = async (user, data) => {
 };
 
 const getMe = (req, res) => {
-    const { user } = req;
+    const {user} = req;
     return res.json({
         id: user.id,
         firstName: user.firstName,
@@ -34,20 +34,20 @@ const getMe = (req, res) => {
 
 const updateMe = async (req, res, next) => {
     try {
-        const { user } = req;
+        const {user} = req;
 
         // proveri unikatnost username/email ako se menjaju
-        const { username, email } = req.body;
+        const {username, email} = req.body;
 
         if (username) {
             const existing = await User.findOne({
                 where: {
                     username,
-                    id: { [Op.ne]: user.id }
+                    id: {[Op.ne]: user.id}
                 }
             });
             if (existing) {
-                return res.status(400).json({ message: 'Username already taken' });
+                return res.status(400).json({message: 'Username already taken'});
             }
         }
 
@@ -55,11 +55,11 @@ const updateMe = async (req, res, next) => {
             const existingEmail = await User.findOne({
                 where: {
                     email,
-                    id: { [Op.ne]: user.id }
+                    id: {[Op.ne]: user.id}
                 }
             });
             if (existingEmail) {
-                return res.status(400).json({ message: 'Email already taken' });
+                return res.status(400).json({message: 'Email already taken'});
             }
         }
 
@@ -93,24 +93,24 @@ const listUsers = async (req, res, next) => {
 // ADMIN: update bilo kog usera (plus sebe)
 const updateUserById = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const {id} = req.params;
 
         const user = await User.findByPk(id);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({message: 'User not found'});
         }
 
-        const { username, email } = req.body;
+        const {username, email} = req.body;
 
         if (username) {
             const existing = await User.findOne({
                 where: {
                     username,
-                    id: { [Op.ne]: user.id }
+                    id: {[Op.ne]: user.id}
                 }
             });
             if (existing) {
-                return res.status(400).json({ message: 'Username already taken' });
+                return res.status(400).json({message: 'Username already taken'});
             }
         }
 
@@ -118,11 +118,11 @@ const updateUserById = async (req, res, next) => {
             const existingEmail = await User.findOne({
                 where: {
                     email,
-                    id: { [Op.ne]: user.id }
+                    id: {[Op.ne]: user.id}
                 }
             });
             if (existingEmail) {
-                return res.status(400).json({ message: 'Email already taken' });
+                return res.status(400).json({message: 'Email already taken'});
             }
         }
 

@@ -1,17 +1,17 @@
 require('dotenv').config();
 const app = require('./src/app');
-const { sequelize, User } = require('./src/models');
+const {sequelize, User} = require('./src/models');
 const bcrypt = require('bcryptjs');
 
 const PORT = process.env.PORT || 3001;
 
 sequelize
-    .sync({ alter: false })
+    .sync({alter: false})
     .then(async () => {
         console.log('Database synced');
 
         // default admin (ako ne postoji)
-        const adminExists = await User.findOne({ where: { username: 'admin' } });
+        const adminExists = await User.findOne({where: {username: 'admin'}});
         if (!adminExists) {
             const passwordHash = await bcrypt.hash('admin123', 10);
             await User.create({

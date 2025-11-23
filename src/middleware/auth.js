@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const {User} = require('../models');
 
 const authMiddleware = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Missing or invalid Authorization header' });
+        return res.status(401).json({message: 'Missing or invalid Authorization header'});
     }
 
     const token = authHeader.substring(7);
@@ -15,24 +15,24 @@ const authMiddleware = async (req, res, next) => {
         const user = await User.findByPk(payload.id);
 
         if (!user) {
-            return res.status(401).json({ message: 'User not found' });
+            return res.status(401).json({message: 'User not found'});
         }
 
         req.user = user;
         next();
     } catch (err) {
         console.error(err);
-        return res.status(401).json({ message: 'Invalid token' });
+        return res.status(401).json({message: 'Invalid token'});
     }
 };
 
 const requireRole = (role) => {
     return (req, res, next) => {
         if (!req.user) {
-            return res.status(401).json({ message: 'Unauthorized' });
+            return res.status(401).json({message: 'Unauthorized'});
         }
         if (req.user.role !== role) {
-            return res.status(403).json({ message: 'Forbidden: insufficient role' });
+            return res.status(403).json({message: 'Forbidden: insufficient role'});
         }
         next();
     };

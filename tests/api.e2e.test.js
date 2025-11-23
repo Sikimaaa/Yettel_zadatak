@@ -4,7 +4,7 @@ process.env.DATABASE_STORAGE = ':memory:';
 
 const request = require('supertest');
 const app = require('../src/app');
-const { sequelize, User, Task } = require('../src/models');
+const {sequelize, User, Task} = require('../src/models');
 const bcrypt = require('bcryptjs');
 
 let basicToken;
@@ -15,7 +15,7 @@ let adminUserId;
 describe('Yettel Task API - E2E', () => {
     beforeAll(async () => {
         // pun reset šeme
-        await sequelize.sync({ force: true });
+        await sequelize.sync({force: true});
 
         // kreiramo admina direktno u bazi
         const adminPasswordHash = await bcrypt.hash('admin123', 10);
@@ -135,7 +135,7 @@ describe('Yettel Task API - E2E', () => {
             const res = await request(app)
                 .post('/api/tasks')
                 .set('Authorization', `Bearer ${basicToken}`)
-                .send({ body: 'My first task' });
+                .send({body: 'My first task'});
 
             expect(res.status).toBe(201);
             expect(res.body.id).toBeDefined();
@@ -148,7 +148,7 @@ describe('Yettel Task API - E2E', () => {
             const res = await request(app)
                 .post('/api/tasks')
                 .set('Authorization', `Bearer ${adminToken}`)
-                .send({ body: 'Admin task that should fail' });
+                .send({body: 'Admin task that should fail'});
 
             expect(res.status).toBe(403);
         });
@@ -157,12 +157,12 @@ describe('Yettel Task API - E2E', () => {
             const res2 = await request(app)
                 .post('/api/tasks')
                 .set('Authorization', `Bearer ${basicToken}`)
-                .send({ body: 'Second task' });
+                .send({body: 'Second task'});
 
             const res3 = await request(app)
                 .post('/api/tasks')
                 .set('Authorization', `Bearer ${basicToken}`)
-                .send({ body: 'Third task' });
+                .send({body: 'Third task'});
 
             expect(res2.status).toBe(201);
             expect(res3.status).toBe(201);
@@ -233,7 +233,7 @@ describe('Yettel Task API - E2E', () => {
             const res = await request(app)
                 .put(`/api/tasks/${task1.id}`)
                 .set('Authorization', `Bearer ${basicToken}`)
-                .send({ body: 'Updated first task' });
+                .send({body: 'Updated first task'});
 
             expect(res.status).toBe(200);
             expect(res.body.body).toBe('Updated first task');
@@ -243,7 +243,7 @@ describe('Yettel Task API - E2E', () => {
             const res = await request(app)
                 .put(`/api/tasks/${task2.id}`)
                 .set('Authorization', `Bearer ${adminToken}`)
-                .send({ body: 'Admin updated task 2' });
+                .send({body: 'Admin updated task 2'});
 
             expect(res.status).toBe(200);
             expect(res.body.body).toBe('Admin updated task 2');
